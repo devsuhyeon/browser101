@@ -3,15 +3,21 @@ const horizontal = document.querySelector('.horizontal');
 const vertical = document.querySelector('.vertical');
 const tag = document.querySelector('.tag');
 
-document.addEventListener('mousemove', (event) => {
-  let x = event.clientX;
-  let y = event.clientY;
+addEventListener('load', () => {
+  const targetRect = target.getBoundingClientRect();
+  const targetHalfWidth = targetRect.width / 2;
+  const targetHalfHeight = targetRect.height / 2;
 
-  target.style.left = `${x}px`;
-  target.style.top = `${y}px`;
-  horizontal.style.top = `${y}px`;
-  vertical.style.left = `${x}px`;
-  tag.style.left = `${x}px`;
-  tag.style.top = `${y}px`;
-  tag.innerHTML = `${x}px, ${y}px`;
+  document.addEventListener('mousemove', (event) => {
+    let x = event.clientX;
+    let y = event.clientY;
+
+    vertical.style.transform = `translateX(${x}px)`;
+    horizontal.style.transform = `translateY(${y}px)`;
+    target.style.transform = `translate(${x - targetHalfWidth}px, ${
+      y - targetHalfHeight
+    }px)`;
+    tag.style.transform = `translate(${x}px, ${y}px)`;
+    tag.innerHTML = `${x}px, ${y}px`;
+  });
 });
