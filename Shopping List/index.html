@@ -5,19 +5,24 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
   <title>Shopping List</title>
   <script src="app.js" defer></script>
-  <script src="https://kit.fontawesome.com/3abe122ed0.js" crossorigin="anonymous"></script>
+  
 </head>
 <body>
   <section class="list">
     <header class="header">Shopping List</header>
     <ul class="items">
-      <li class="item">
-        <span class="item__name">Egg</span>
-        <button class="item__delete">
-          <i class="fas fa-trash-alt"></i>
-        </button>
+      <li class="item__row">
+        <div class="item">
+          <span class="item__name">Egg</span>
+          <button class="item__delete">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+        <div class="item__divider"></div>
       </li>
     </ul>
     <footer class="footer">
