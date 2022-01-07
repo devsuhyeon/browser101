@@ -52,38 +52,35 @@ button {
   justify-content: space-between;
   color: rgb(63, 63, 63);
   font-weight: 400;
-  /* font-size: 16px; */
+}
+
+.item__row {
+  margin-bottom: 12px;
 }
 
 .item__check {
   margin-right: 8px;
   font-size: 16px;
-  color: rgba(73, 73, 73, 0.479);
+  color: rgb(63, 63, 63);
   transition: all 300ms ease-in;
   position: relative;
 }
 
 .item__check:hover {
   transform: scale(1.1);
-  color: rgb(63, 63, 63);
 }
 
 .item__check.checked {
-  color: rgb(63, 63, 63);
+  color: rgba(73, 73, 73, 0.479);
+}
+
+.item__name {
+  font-weight: 500;
 }
 
 .item__name.checked {
   color: rgba(73, 73, 73, 0.479);
-}
-
-.item__name.checked::before {
-  content: "";
-  display: inline-block;
-  width: 40px;
-  height: 10px;
-  border-top: 1px solid rgba(73, 73, 73, 0.479);
-  position: absolute;
-  transform: translate(-2px, 12px);
+  text-decoration: line-through;
 }
 
 .item__delete {
@@ -114,8 +111,9 @@ button {
   height: 32px;
   border: none;
   outline: none;
-  font-size: 24px;
+  font-size: 18px;
   padding: 0 16px;
+  color: rgb(63, 63, 63);
 }
 
 .footer__button {
