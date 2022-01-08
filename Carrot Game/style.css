@@ -92,9 +92,10 @@ button {
 }
 
 .game__field {
-  width: 100%;
+  width: 800px;
   height: 100%;
   margin-top: 70px;
+  position: relative;
 }
 
 .pop-up {
