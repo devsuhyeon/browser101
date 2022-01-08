@@ -96,3 +96,37 @@ button {
   height: 100%;
   margin-top: 70px;
 }
+
+.pop-up {
+  width: 400px;
+  height: 140px;
+  text-align: center;
+  background-color: var(--color-black-opacity);
+  border-radius: var(--size-border-radius);
+  margin: auto;
+  padding: 20px;
+  transform: translateY(-150%);
+}
+
+.pop-up--hide {
+  display: none;
+}
+
+.pop-up__replay {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-light-orange);
+  font-size: var(--font-large);
+  border: 3px solid var(--color-black);
+  border-radius: var(--size-border-radius);
+  margin-top: 16px;
+  transition: all 300ms ease-in;
+}
+
+.pop-up__message {
+  color: var(--color-white);
+  font-size: var(--font-medium);
+  font-weight: var(--weight-semi-bold);
+  margin-top: 8px;
+
+}
