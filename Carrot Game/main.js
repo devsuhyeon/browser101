@@ -13,6 +13,12 @@ const popUp = document.querySelector(".pop-up");
 const popUpMessage = document.querySelector(".pop-up__message");
 const popUpReplay = document.querySelector(".pop-up__replay");
 
+const alertSound = new Audio("./sound/alert.wav");
+const bgSound = new Audio("./sound/bg.mp3");
+const bugSound = new Audio("./sound/bug_pull.mp3");
+const carrotSound = new Audio("./sound/carrot_pull.mp3");
+const gameWinSound = new Audio("./sound/game_win.mp3");
+
 let started = false;
 let score = 0;
 let timer = undefined;
@@ -27,7 +33,6 @@ popUpReplay.addEventListener("click", () => {
   hidePopUp();
   showGameBtn();
   startGame();
-  resetScore();
 });
 
 gameBtn.addEventListener("click", () => {
@@ -44,6 +49,7 @@ function startGame() {
   showStopBtn();
   showTimerAndScore();
   startGameTimer();
+  playSound(bgSound);
 }
 
 function stopGame() {
@@ -51,13 +57,21 @@ function stopGame() {
   hideGameBtn();
   stopGameTimer();
   showPopUpWithText("REPLAY?");
+  playSound(alertSound);
+  stopSound(bgSound);
 }
 
 function finishGame(win) {
   started = false;
   hideGameBtn();
   stopGameTimer();
+  if (win) {
+    playSound(gameWinSound);
+  } else {
+    playSound(bugSound);
+  }
   showPopUpWithText(win ? "YOU WON" : "YOU LOST");
+  stopSound(bgSound);
 }
 
 function showStopBtn() {
@@ -111,11 +125,8 @@ function hidePopUp() {
   popUp.classList.add("pop-up--hide");
 }
 
-function resetScore() {
-  score = 0;
-}
-
 function initGame() {
+  score = 0;
   gameField.innerHTML = "";
   gameScore.innerText = CARROT_COUNT;
   createItem("carrot", CARROT_COUNT);
@@ -131,16 +142,24 @@ function onFieldClick(event) {
     clickedItem.remove();
     score++;
     updateScoreBoard();
+    playSound(carrotSound);
     if (score === CARROT_COUNT) {
       finishGame(true);
     }
   } else if (clickedItem.matches(".bug")) {
-    // stopGameTimer();
-    // showPopUpWithText('REPLAY?');
     finishGame(false);
   } else {
     return;
   }
+}
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
+function stopSound(sound) {
+  sound.pause();
 }
 
 function updateScoreBoard() {
