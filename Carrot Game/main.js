@@ -31,7 +31,6 @@ const GAME_DURATION_SEC = 5;
 gameField.addEventListener("click", onFieldClick);
 popUpReplay.addEventListener("click", () => {
   hidePopUp();
-  showGameBtn();
   startGame();
 });
 
@@ -78,14 +77,11 @@ function showStopBtn() {
   const icon = document.querySelector(".fas");
   icon.classList.add("fa-stop");
   icon.classList.remove("fa-play");
+  gameBtn.style.visibility = "visible";
 }
 
 function hideGameBtn() {
   gameBtn.style.visibility = "hidden";
-}
-
-function showGameBtn() {
-  gameBtn.style.visibility = "visible";
 }
 
 function showTimerAndScore() {

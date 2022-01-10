@@ -24,7 +24,7 @@
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
   box-sizing: border-box;
   background-color: var(--color-black);
@@ -77,6 +77,8 @@ button {
   background-color: var(--color-dark-white);
   border-radius: var(--size-border-radius);
   visibility: hidden;
+  user-select: none;
+  cursor: auto;
 }
 
 .game__score {
@@ -91,6 +93,8 @@ button {
   background-color: var(--color-orange);
   color: var(--color-white);
   visibility: hidden;
+  user-select: none;
+  cursor: auto;
 }
 
 .game__field {
@@ -131,5 +135,16 @@ button {
   font-size: var(--font-medium);
   font-weight: var(--weight-semi-bold);
   margin-top: 8px;
+  user-select: none;
+  cursor: auto;
+}
 
+.carrot,
+.bug {
+  transition: transform 100ms ease-in;
+}
+
+.carrot:hover,
+.bug:hover {
+  transform: scale(1.1);
 }
