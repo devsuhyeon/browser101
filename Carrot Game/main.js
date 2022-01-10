@@ -1,17 +1,17 @@
-'use strict'
+"use strict";
 
-const gameField = document.querySelector('.game__field');
+const gameField = document.querySelector(".game__field");
 const fieldRect = gameField.getBoundingClientRect();
 const fieldWidth = fieldRect.width;
 const fieldHeight = fieldRect.height;
 
-const gameBtn = document.querySelector('.game__button');
-const gameTimer = document.querySelector('.game__timer');
-const gameScore = document.querySelector('.game__score');
+const gameBtn = document.querySelector(".game__button");
+const gameTimer = document.querySelector(".game__timer");
+const gameScore = document.querySelector(".game__score");
 
-const popUp = document.querySelector('.pop-up');
-const popUpMessage = document.querySelector('.pop-up__message');
-const popUpReplay = document.querySelector('.pop-up__replay');
+const popUp = document.querySelector(".pop-up");
+const popUpMessage = document.querySelector(".pop-up__message");
+const popUpReplay = document.querySelector(".pop-up__replay");
 
 let started = false;
 let score = 0;
@@ -22,97 +22,150 @@ const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_DURATION_SEC = 5;
 
+gameField.addEventListener("click", onFieldClick);
+popUpReplay.addEventListener("click", () => {
+  hidePopUp();
+  showGameBtn();
+  startGame();
+  resetScore();
+});
 
-gameBtn.addEventListener('click', () => {
-    if (started) {
-        stopGame(); 
-    } else {
-        startGame();
-    }
-    started = !started;
+gameBtn.addEventListener("click", () => {
+  if (started) {
+    stopGame();
+  } else {
+    startGame();
+  }
 });
 
 function startGame() {
-    initGame();
-    showStopBtn();
-    showTimerAndScore();
-    startGameTimer();
+  started = true;
+  initGame();
+  showStopBtn();
+  showTimerAndScore();
+  startGameTimer();
 }
 
 function stopGame() {
-    hideGameBtn();
-    stopGameTimer();
-    showPopUpWithText('REPLAY?');
+  started = false;
+  hideGameBtn();
+  stopGameTimer();
+  showPopUpWithText("REPLAY?");
+}
+
+function finishGame(win) {
+  started = false;
+  hideGameBtn();
+  stopGameTimer();
+  showPopUpWithText(win ? "YOU WON" : "YOU LOST");
 }
 
 function showStopBtn() {
-    const icon = gameBtn.querySelector('.fa-play');
-    icon.classList.add('fa-stop');
-    icon.classList.remove('fa-play');
+  const icon = document.querySelector(".fas");
+  icon.classList.add("fa-stop");
+  icon.classList.remove("fa-play");
 }
 
 function hideGameBtn() {
-    gameBtn.style.visibility = 'hidden';
+  gameBtn.style.visibility = "hidden";
+}
+
+function showGameBtn() {
+  gameBtn.style.visibility = "visible";
 }
 
 function showTimerAndScore() {
-    gameTimer.style.visibility = 'visible';
-    gameScore.style.visibility = 'visible';
+  gameTimer.style.visibility = "visible";
+  gameScore.style.visibility = "visible";
 }
 
 function startGameTimer() {
-    let remaingTimeSec = GAME_DURATION_SEC;
-    updateTimerText(remaingTimeSec);
-    timer = setInterval(() => {
-        if (remaingTimeSec <= 0) {
-            clearInterval(timer);
-            return;
-        }
-        updateTimerText(--remaingTimeSec);
-    }, 1000);
+  let remaingTimeSec = GAME_DURATION_SEC;
+  updateTimerText(remaingTimeSec);
+  timer = setInterval(() => {
+    if (remaingTimeSec <= 0) {
+      clearInterval(timer);
+      finishGame(CARROT_COUNT === score);
+      return;
+    }
+    updateTimerText(--remaingTimeSec);
+  }, 1000);
 }
 
 function stopGameTimer() {
-    clearInterval(timer);
+  clearInterval(timer);
 }
 
 function updateTimerText(time) {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    gameTimer.innerText = `${minutes} : ${seconds}`;
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  gameTimer.innerText = `${minutes} : ${seconds}`;
 }
 
-function showPopUpWithText (text) {
-    popUpMessage.innerText = text;
-    popUp.classList.remove('pop-up--hide');
+function showPopUpWithText(text) {
+  popUpMessage.innerText = text;
+  popUp.classList.remove("pop-up--hide");
+}
+
+function hidePopUp() {
+  popUp.classList.add("pop-up--hide");
+}
+
+function resetScore() {
+  score = 0;
 }
 
 function initGame() {
-    gameField.innerHTML = '';
-    gameScore.innerText = CARROT_COUNT;
-    createItem('carrot', CARROT_COUNT);
-    createItem('bug', BUG_COUNT);
+  gameField.innerHTML = "";
+  gameScore.innerText = CARROT_COUNT;
+  createItem("carrot", CARROT_COUNT);
+  createItem("bug", BUG_COUNT);
+}
+
+function onFieldClick(event) {
+  if (!started) {
+    return;
+  }
+  const clickedItem = event.target;
+  if (clickedItem.matches(".carrot")) {
+    clickedItem.remove();
+    score++;
+    updateScoreBoard();
+    if (score === CARROT_COUNT) {
+      finishGame(true);
+    }
+  } else if (clickedItem.matches(".bug")) {
+    // stopGameTimer();
+    // showPopUpWithText('REPLAY?');
+    finishGame(false);
+  } else {
+    return;
+  }
+}
+
+function updateScoreBoard() {
+  gameScore.innerText = CARROT_COUNT - score;
 }
 
 function randomCoords() {
-    const x = Math.floor(Math.random() * (fieldWidth - CARROT_SIZE));
-    const y = Math.floor(Math.random() * (fieldHeight - CARROT_SIZE));
-    return [x, y];
+  const x = Math.floor(Math.random() * (fieldWidth - CARROT_SIZE));
+  const y = Math.floor(Math.random() * (fieldHeight - CARROT_SIZE));
+  return [x, y];
 }
 
 function createItem(itemType, count) {
-    const imgPath = `img/${itemType}.png`;
+  const imgPath = `img/${itemType}.png`;
 
-    for (let i = 0; i < count; i++) {
-        const item = document.createElement('img');
-        item.setAttribute('class', itemType);
-        item.setAttribute('src', imgPath);
-        item.style.position = 'absolute';
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement("img");
+    item.setAttribute("class", itemType);
+    item.setAttribute("src", imgPath);
+    item.style.position = "absolute";
 
-        const coords = randomCoords();
-        item.style.left = `${coords[0]}px`;
-        item.style.top = `${coords[1]}px`;
+    const coords = randomCoords();
+    item.style.left = `${coords[0]}px`;
+    item.style.top = `${coords[1]}px`;
 
-        gameField.append(item);
-    }
+    gameField.append(item);
+  }
 }
