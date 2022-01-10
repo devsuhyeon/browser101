@@ -59,7 +59,7 @@ button {
   font-size: var(--font-regular);
   border: 3px solid var(--color-black);
   background-color: var(--color-light-orange);
-  transition: all 300ms ease-in;
+  transition: scale 300ms ease-in;
 }
 
 .game__button:hover {
