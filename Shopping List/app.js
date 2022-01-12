@@ -30,10 +30,27 @@ function createItem(text) {
 
   const checkBtn = document.createElement('button');
   checkBtn.setAttribute('class', 'item__check');
-  checkBtn.innerHTML = `<i class="far fa-check-circle"></i>`;
+
+  const checkBtnIcon = document.createElement('i');
+  checkBtnIcon.setAttribute('class', 'far fa-check-circle checked-icon');
+
   checkBtn.addEventListener('click', () => {
-    checkBtn.classList.toggle('checked');
     itemName.classList.toggle('checked');
+    if (itemName.classList.contains('checked')) {
+      checkBtn.classList.add('checked');
+      checkBtn.style.transform = 'rotateY(180deg)';
+      setTimeout(() => {
+        checkBtnIcon.classList.add('fas');
+        checkBtnIcon.classList.remove('far');
+      }, 200);
+    } else {
+      checkBtn.classList.remove('checked');
+      checkBtn.style.transform = 'rotateY(0deg)';
+      setTimeout(() => {
+        checkBtnIcon.classList.remove('fas');
+        checkBtnIcon.classList.add('far');
+      }, 200);
+    }
   });
 
   const itemName = document.createElement('span');
@@ -50,6 +67,7 @@ function createItem(text) {
   const itemDivider = document.createElement('div');
   itemDivider.setAttribute('class', 'item__divider');
 
+  checkBtn.append(checkBtnIcon);
   itemInfo.append(checkBtn);
   itemInfo.append(itemName);
   item.append(itemInfo);
