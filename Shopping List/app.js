@@ -18,23 +18,55 @@ function onAdd() {
   input.focus();
 }
 
+let id = 0;
 function createItem(text) {
   const itemRow = document.createElement('li');
   itemRow.setAttribute('class', 'item__row');
+  itemRow.setAttribute('data-id', id);
 
-  const item = document.createElement('div');
-  item.setAttribute('class', 'item');
+  itemRow.innerHTML = `
+    <div class="item">
+      <div class="item__info">
+        <button class="item__check">
+          <i class="far fa-check-circle checked-icon" data-check-id=${id}></i>
+        </button>
+        <span class="item__name">${text}</span>
+      </div>
+      <button class="item__delete">
+        <i class="fas fa-trash-alt" data-delete-id=${id}></i>
+      </button>
+    </div>
+    <div class="item__divider"></div>
+  `;
 
-  const itemInfo = document.createElement('div');
-  itemInfo.setAttribute('class', 'item__info');
+  id++;
+  return itemRow;
+}
 
-  const checkBtn = document.createElement('button');
-  checkBtn.setAttribute('class', 'item__check');
+addBtn.addEventListener('click', () => {
+  onAdd();
+});
 
-  const checkBtnIcon = document.createElement('i');
-  checkBtnIcon.setAttribute('class', 'far fa-check-circle checked-icon');
+input.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    onAdd();
+  }
+});
 
-  checkBtn.addEventListener('click', () => {
+items.addEventListener('click', (event) => {
+  const checkId = event.target.dataset.checkId;
+  const deleteId = event.target.dataset.deleteId;
+
+  if (!checkId && !deleteId) {
+    return;
+  }
+
+  if (checkId) {
+    const itemRow = document.querySelector(`.item__row[data-id="${checkId}"]`);
+    const itemName = itemRow.querySelector('.item__name');
+    const checkBtn = itemRow.querySelector('.item__check');
+    const checkBtnIcon = itemRow.querySelector('.checked-icon');
+
     itemName.classList.toggle('checked');
     if (itemName.classList.contains('checked')) {
       checkBtn.classList.add('checked');
@@ -51,39 +83,10 @@ function createItem(text) {
         checkBtnIcon.classList.add('far');
       }, 200);
     }
-  });
-
-  const itemName = document.createElement('span');
-  itemName.setAttribute('class', 'item__name');
-  itemName.innerText = text;
-
-  const deleteBtn = document.createElement('button');
-  deleteBtn.setAttribute('class', 'item__delete');
-  deleteBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
-  deleteBtn.addEventListener('click', () => {
-    items.removeChild(itemRow);
-  });
-
-  const itemDivider = document.createElement('div');
-  itemDivider.setAttribute('class', 'item__divider');
-
-  checkBtn.append(checkBtnIcon);
-  itemInfo.append(checkBtn);
-  itemInfo.append(itemName);
-  item.append(itemInfo);
-  item.append(deleteBtn);
-  itemRow.append(item);
-  itemRow.append(itemDivider);
-
-  return itemRow;
-}
-
-addBtn.addEventListener('click', () => {
-  onAdd();
-});
-
-input.addEventListener('keypress', (event) => {
-  if (event.key === 'Enter') {
-    onAdd();
+  } else if (deleteId) {
+    const toBeDeleted = document.querySelector(
+      `.item__row[data-id="${deleteId}"]`
+    );
+    toBeDeleted.remove();
   }
 });
