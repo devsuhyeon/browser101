@@ -31,7 +31,7 @@ export class GameBuilder {
 }
 
 class Game {
-  constructor(carrotCount, bugCount, gameDuration) {
+  constructor(gameDuration, carrotCount, bugCount) {
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
     this.gameDuration = gameDuration;
@@ -41,7 +41,7 @@ class Game {
     this.gameBtn = document.querySelector('.game__button');
     this.gameBtn.addEventListener('click', () => {
       if (this.started) {
-        this.stop();
+        this.stop(Reason.cancel);
       } else {
         this.start();
       }
@@ -68,26 +68,12 @@ class Game {
     this.onGameStop = onGameStop;
   }
 
-  stop() {
+  stop(reason) {
     this.started = false;
     this.hideGameBtn();
     this.stopGameTimer();
-    sound.playAlert();
     sound.stopBackground();
-    this.onGameStop && this.onGameStop(Reason.cancel);
-  }
-
-  finish(win) {
-    this.started = false;
-    this.hideGameBtn();
-    this.stopGameTimer();
-    if (win) {
-      sound.playWin();
-    } else {
-      sound.playBug();
-    }
-    this.onGameStop && this.onGameStop(win ? Reason.win : Reason.lose);
-    sound.stopBackground();
+    this.onGameStop && this.onGameStop(reason);
   }
 
   onItemClick = (item) => {
@@ -98,10 +84,10 @@ class Game {
       this.score++;
       this.updateScoreBoard();
       if (this.score === this.carrotCount) {
-        this.finish(true);
+        this.stop(Reason.win);
       }
     } else if (item === 'bug') {
-      this.finish(false);
+      this.stop(Reason.lose);
     } else {
       return;
     }
@@ -129,7 +115,7 @@ class Game {
     this.timer = setInterval(() => {
       if (remaingTimeSec <= 0) {
         clearInterval(this.timer);
-        this.finish(this.carrotCount === this.score);
+        this.stop(this.carrotCount === this.score ? Reason.win : Reason.lose);
         return;
       }
       this.updateTimerText(--remaingTimeSec);
